@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
-import { ChevronLeft, X, User, Sliders, MoreHorizontal } from "lucide-react"
+import { ChevronLeft, X, User, Sliders, MoreHorizontal, Briefcase } from "lucide-react"
 import Link from "next/link"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export default function Settings() {
   const [selectedLaws, setSelectedLaws] = useState([])
@@ -39,6 +40,14 @@ export default function Settings() {
   const handleTemplateRemove = (template) => {
     setUploadedTemplates(uploadedTemplates.filter((t) => t !== template))
   }
+
+  const dummyMatters = [
+    { id: 1, name: "Smith vs. Johnson", type: "Civil Litigation", status: "Active", lastUpdated: "2023-06-15" },
+    { id: 2, name: "Estate of Brown", type: "Probate", status: "Pending", lastUpdated: "2023-06-10" },
+    { id: 3, name: "Green Corp Merger", type: "Corporate", status: "Completed", lastUpdated: "2023-06-05" },
+    { id: 4, name: "Doe Divorce", type: "Family Law", status: "Active", lastUpdated: "2023-06-12" },
+    { id: 5, name: "Tech Patent Dispute", type: "Intellectual Property", status: "Active", lastUpdated: "2023-06-18" },
+  ]
 
   return (
     <div className="min-h-screen bg-background flex justify-center">
@@ -69,6 +78,14 @@ export default function Settings() {
               >
                 <Sliders className="mr-2 h-4 w-4" />
                 Generation
+              </Button>
+              <Button
+                variant={activeTab === "matters" ? "secondary" : "ghost"}
+                className="w-full justify-start"
+                onClick={() => setActiveTab("matters")}
+              >
+                <Briefcase className="mr-2 h-4 w-4" />
+                Matters
               </Button>
               <Button
                 variant={activeTab === "miscellaneous" ? "secondary" : "ghost"}
@@ -174,6 +191,36 @@ export default function Settings() {
                     <Input id="password" type="password" placeholder="New password" />
                   </div>
                   <Button>Update Account</Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {activeTab === "matters" && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold">Legal Matters</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Matter Name</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Last Updated</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {dummyMatters.map((matter) => (
+                        <TableRow key={matter.id}>
+                          <TableCell>{matter.name}</TableCell>
+                          <TableCell>{matter.type}</TableCell>
+                          <TableCell>{matter.status}</TableCell>
+                          <TableCell>{matter.lastUpdated}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </CardContent>
               </Card>
             )}
