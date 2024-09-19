@@ -9,10 +9,10 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [serverResponse, setServerResponse] = useState(null);
 
   const handleFileSelect = (file) => {
     if (selectedFile && selectedFile.name === file.name) {
-      // If the same file is clicked again, close the preview
       setSelectedFile(null);
     } else {
       setSelectedFile(file);
@@ -21,6 +21,10 @@ const Home = () => {
 
   const handleFileUpload = (files) => {
     setUploadedFiles(files);
+  };
+
+  const handleServerResponse = (response) => {
+    setServerResponse(response);
   };
 
   const handleClosePreview = () => {
@@ -32,13 +36,22 @@ const Home = () => {
       <TopBar />
       <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
         <ResizablePanel defaultSize={50} minSize={30}>
-          <LeftPanel onFileSelect={handleFileSelect} onFileUpload={handleFileUpload} uploadedFiles={uploadedFiles} />
+          <LeftPanel 
+            onFileSelect={handleFileSelect} 
+            onFileUpload={handleFileUpload} 
+            uploadedFiles={uploadedFiles} 
+            onServerResponse={handleServerResponse}
+          />
         </ResizablePanel>
         {uploadedFiles.length > 0 && (
           <>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50} minSize={30}>
-              <RightPanel selectedFile={selectedFile} onClose={handleClosePreview} />
+              <RightPanel 
+                selectedFile={selectedFile} 
+                onClose={handleClosePreview} 
+                serverResponse={serverResponse}
+              />
             </ResizablePanel>
           </>
         )}

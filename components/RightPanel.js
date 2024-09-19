@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
-const RightPanel = ({ selectedFile, onClose }) => {
+const RightPanel = ({ selectedFile, onClose, serverResponse }) => {
   const [fileContent, setFileContent] = useState(null);
 
   useEffect(() => {
@@ -18,14 +18,6 @@ const RightPanel = ({ selectedFile, onClose }) => {
             style={{ border: 'none' }}
           />
         );
-      } else if (selectedFile.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        setFileContent(
-          <div className="p-4">
-            <p>Preview not available for .docx files.</p>
-            <p>Filename: {selectedFile.name}</p>
-            <p>File size: {(selectedFile.size / 1024).toFixed(2)} KB</p>
-          </div>
-        );
       }
     } else {
       setFileContent(null);
@@ -36,7 +28,7 @@ const RightPanel = ({ selectedFile, onClose }) => {
     <div className="w-full h-full flex flex-col">
       <div className="flex justify-between items-center p-2 border-b">
         <h2 className="text-lg font-semibold">
-          {selectedFile ? `Preview: ${selectedFile.name}` : 'Output'}
+          {selectedFile ? `Preview: ${selectedFile.name}` : 'Server Response'}
         </h2>
         {selectedFile && (
           <Button onClick={onClose} variant="ghost" size="icon">
@@ -47,9 +39,20 @@ const RightPanel = ({ selectedFile, onClose }) => {
       <div className="flex-1 overflow-auto">
         {fileContent ? (
           fileContent
+        ) : serverResponse ? (
+          <div className="p-4">
+            <h3 className="text-lg font-semibold mb-2">File Information:</h3>
+            {serverResponse.files.map((file, index) => (
+              <div key={index} className="mb-4 p-2 border rounded">
+                <p><strong>Filename:</strong> {file.filename}</p>
+                <p><strong>Character Count:</strong> {file.char_count}</p>
+                <p><strong>Page Count:</strong> {file.page_count}</p>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">Select a file to preview</p>
+            <p className="text-gray-500">Upload files to see server response</p>
           </div>
         )}
       </div>
