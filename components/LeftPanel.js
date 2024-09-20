@@ -3,32 +3,10 @@
 import { Upload, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles, onServerResponse }) => {
-  const handleFileUpload = async (event) => {
+const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles }) => {
+  const handleFileUpload = (event) => {
     const files = Array.from(event.target.files).filter(file => file.type === 'application/pdf');
     onFileUpload(files);
-
-    if (files.length > 0) {
-      const formData = new FormData();
-      files.forEach(file => formData.append('files', file));
-
-      try {
-        const response = await fetch('http://localhost:8080/api/example', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to upload files');
-        }
-
-        const data = await response.json();
-        onServerResponse(data);
-      } catch (error) {
-        console.error('Error uploading files:', error);
-        onServerResponse({ error: error.message });
-      }
-    }
   };
 
   const truncateFileName = (name, maxLength = 10) => {
