@@ -1,35 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FileText } from 'lucide-react';
 
-const loadingMessages = [
-  "Decoding legal jargon...",
-  "Untangling the web of precedents...",
-  "Polishing the scales of justice...",
-  "Sharpening Occam's razor...",
-  "Balancing Lady Justice's scales...",
-  "Brewing a pot of legal wisdom...",
-  "Navigating the labyrinth of laws...",
-  "Consulting the oracle of jurisprudence...",
-];
-
 const LoadingState = () => {
-  const [messageIndex, setMessageIndex] = useState(0);
-  const [currentMessage, setCurrentMessage] = useState(loadingMessages[0]);
-  const [nextMessage, setNextMessage] = useState(loadingMessages[1]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setMessageIndex((prevIndex) => (prevIndex + 1) % loadingMessages.length);
-    }, 4000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    setCurrentMessage(loadingMessages[messageIndex]);
-    setNextMessage(loadingMessages[(messageIndex + 1) % loadingMessages.length]);
-  }, [messageIndex]);
-
   return (
     <div className="flex flex-col items-center justify-center h-full relative">
       <div className="absolute inset-0 flex items-center justify-center">
@@ -54,26 +26,8 @@ const LoadingState = () => {
           <line className="animate-draw" x1="16" y1="17" x2="8" y2="17" />
           <polyline className="animate-draw" points="10 9 9 9 8 9" />
         </svg>
-        <div className="h-14 relative overflow-hidden">
-          <p
-            className="text-lg font-medium text-gray-600 absolute w-full transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateY(${messageIndex % 2 === 0 ? '0' : '-100%'})`,
-            }}
-          >
-            {currentMessage}
-          </p>
-          <p
-            className="text-lg font-medium text-gray-600 absolute w-full transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateY(${messageIndex % 2 === 0 ? '100%' : '0'})`,
-            }}
-          >
-            {nextMessage}
-          </p>
-        </div>
-        <p className="text-sm text-gray-500 mt-2">
-          Hang tight, legal brilliance takes time!
+        <p className="text-lg font-medium text-gray-600">
+          Processing your files...
         </p>
       </div>
     </div>
