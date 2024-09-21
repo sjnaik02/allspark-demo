@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import "./globals.css";
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -14,7 +15,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.variable} antialiased bg-background text-foreground`}
       >
-        {children}
+        <TooltipProvider>
+          {children}
+        </TooltipProvider>
       </body>
     </html>
   );

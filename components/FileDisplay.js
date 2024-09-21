@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -40,19 +41,25 @@ const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
         <div className="px-4 pb-4 pt-2 border-t">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {files.map((file, index) => (
-              <div 
-                key={index} 
-                className="flex flex-col items-center cursor-pointer hover:bg-accent/50 p-2 rounded-md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onFileSelect(file);
-                }}
-              >
-                <FileText className="h-8 w-8 text-muted-foreground" />
-                <span className="text-xs mt-1 text-center font-mono max-w-[100px]">
-                  {truncateFileName(file.name)}
-                </span>
-              </div>
+              <Tooltip key={index}>
+                <TooltipTrigger asChild>
+                  <div 
+                    className="flex flex-col items-center cursor-pointer hover:bg-accent/50 p-2 rounded-md"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onFileSelect(file);
+                    }}
+                  >
+                    <FileText className="h-8 w-8 text-muted-foreground" />
+                    <span className="text-xs mt-1 text-center font-mono max-w-[100px] truncate">
+                      {truncateFileName(file.name)}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{file.name}</p>
+                </TooltipContent>
+              </Tooltip>
             ))}
           </div>
         </div>
