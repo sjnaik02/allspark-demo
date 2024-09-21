@@ -1,7 +1,14 @@
-import React from 'react';
-import { FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
-const FileDisplay = ({ files, isCollapsible = false, isExpanded = true, onToggle }) => {
+const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = (e) => {
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
+  };
+
   const truncateFileName = (name, maxLength = 20) => {
     if (name.length <= maxLength) return name;
     const extension = name.split('.').pop();
@@ -10,22 +17,38 @@ const FileDisplay = ({ files, isCollapsible = false, isExpanded = true, onToggle
   };
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
-      {isCollapsible && (
-        <div 
-          className="p-4 border-b flex justify-between items-center cursor-pointer"
-          onClick={onToggle}
-        >
-          <h2 className="text-xl font-semibold">Files ({files.length})</h2>
-          {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+    <div 
+      className={`border rounded-lg transition-all duration-200 ${
+        isSelected ? 'border-primary bg-primary/5' : ''
+      }`}
+      onClick={onSelect}
+    >
+      <div className="p-4 flex items-center justify-between cursor-pointer">
+        <div>
+          <h2 className="text-xl font-semibold">{name}</h2>
+          <p className="text-sm text-muted-foreground">{files.length} files</p>
         </div>
-      )}
-      {(!isCollapsible || isExpanded) && (
-        <div className="p-4">
-          <div className="flex flex-wrap gap-4">
+        <div onClick={toggleExpanded}>
+          {isExpanded ? (
+            <ChevronUp className="h-6 w-6 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-6 w-6 text-muted-foreground" />
+          )}
+        </div>
+      </div>
+      {isExpanded && (
+        <div className="px-4 pb-4 pt-2 border-t">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {files.map((file, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <FileText className="h-12 w-12 text-gray-400" />
+              <div 
+                key={index} 
+                className="flex flex-col items-center cursor-pointer hover:bg-accent/50 p-2 rounded-md"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onFileSelect(file);
+                }}
+              >
+                <FileText className="h-8 w-8 text-muted-foreground" />
                 <span className="text-xs mt-1 text-center font-mono max-w-[100px]">
                   {truncateFileName(file.name)}
                 </span>

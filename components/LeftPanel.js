@@ -43,6 +43,7 @@ const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles }) => {
       ) : (
         <>
           <FileDisplay 
+            onFileSelect={onFileSelect}
             files={uploadedFiles}
             isCollapsible={false}
           />

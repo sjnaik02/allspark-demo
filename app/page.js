@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react';
 import TopBar from '@/components/TopBar';
 import LeftPanel from '@/components/LeftPanel';
 import RightPanel from '@/components/RightPanel';
-import OnboardingScreen from '@/components/OnboardingScreen';
+import GroupSelectionPanel from '@/components/GroupSelectionPanel';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showGroupSelection, setShowGroupSelection] = useState(false);
   const [groupedFiles, setGroupedFiles] = useState({});
   const [onboardingComplete, setOnboardingComplete] = useState(false);
 
@@ -24,7 +24,7 @@ const Home = () => {
 
   const handleFileUpload = (files) => {
     setUploadedFiles(prevFiles => [...prevFiles, ...files]);
-    setShowOnboarding(true);
+    setShowGroupSelection(true);
   };
 
   const handleClosePreview = () => {
@@ -34,13 +34,13 @@ const Home = () => {
   const handleContinue = (selectedGroup) => {
     if (selectedGroup && groupedFiles[selectedGroup]) {
       setUploadedFiles(groupedFiles[selectedGroup]);
-      setShowOnboarding(false);
+      setShowGroupSelection(false);
       setOnboardingComplete(true);
     }
   };
 
   useEffect(() => {
-    if (uploadedFiles.length > 0 && showOnboarding) {
+    if (uploadedFiles.length > 0 && showGroupSelection) {
       const grouped = uploadedFiles.reduce((acc, file) => {
         const prefix = file.name.slice(0, 3).toUpperCase();
         if (!acc[prefix]) {
@@ -51,29 +51,33 @@ const Home = () => {
       }, {});
       setGroupedFiles(grouped);
     }
-  }, [uploadedFiles, showOnboarding]);
+  }, [uploadedFiles, showGroupSelection]);
 
   return (
     <div className="flex flex-col h-screen">
       <TopBar />
-      {!onboardingComplete ? (
-        showOnboarding ? (
-          <OnboardingScreen groupedFiles={groupedFiles} onContinue={handleContinue} />
-        ) : (
-          <LeftPanel 
-            onFileSelect={handleFileSelect} 
-            onFileUpload={handleFileUpload}
-            uploadedFiles={uploadedFiles}
-          />
-        )
+      {!uploadedFiles.length ? (
+        <LeftPanel 
+          onFileSelect={handleFileSelect} 
+          onFileUpload={handleFileUpload}
+          uploadedFiles={uploadedFiles}
+        />
       ) : (
         <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
           <ResizablePanel defaultSize={50} minSize={30}>
-            <LeftPanel 
-              onFileSelect={handleFileSelect} 
-              onFileUpload={handleFileUpload}
-              uploadedFiles={uploadedFiles}
-            />
+            {showGroupSelection ? (
+              <GroupSelectionPanel 
+                groupedFiles={groupedFiles} 
+                onContinue={handleContinue}
+                onFileSelect={handleFileSelect}
+              />
+            ) : (
+              <LeftPanel 
+                onFileSelect={handleFileSelect} 
+                onFileUpload={handleFileUpload}
+                uploadedFiles={uploadedFiles}
+              />
+            )}
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50} minSize={30}>
