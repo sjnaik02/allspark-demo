@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
+const FileDisplay = ({ files, name, summary, isSelected, onSelect, onFileSelect }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = (e) => {
@@ -27,7 +27,8 @@ const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
       <div className="p-4 flex items-center justify-between cursor-pointer">
         <div>
           <h2 className="text-xl font-semibold">{name}</h2>
-          <p className="text-sm text-muted-foreground">{files.length} files</p>
+          <p className="text-sm text-muted-foreground">{summary}</p>
+          <p className="text-sm text-muted-foreground mt-1">{files.length} files</p>
         </div>
         <div onClick={toggleExpanded}>
           {isExpanded ? (
@@ -67,5 +68,4 @@ const FileDisplay = ({ files, name, isSelected, onSelect, onFileSelect }) => {
     </div>
   );
 };
-
 export default FileDisplay;

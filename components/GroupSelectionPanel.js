@@ -5,8 +5,8 @@ import FileDisplay from './FileDisplay';
 const GroupSelectionPanel = ({ groupedFiles, onContinue, onFileSelect }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
 
-  const handleGroupSelect = (prefix) => {
-    setSelectedGroup(prefix === selectedGroup ? null : prefix);
+  const handleGroupSelect = (groupId) => {
+    setSelectedGroup(groupId === selectedGroup ? null : groupId);
   };
 
   return (
@@ -16,13 +16,14 @@ const GroupSelectionPanel = ({ groupedFiles, onContinue, onFileSelect }) => {
         <p className="text-lg text-muted-foreground">Select a group to continue</p>
       </div>
       <div className="space-y-4">
-        {Object.entries(groupedFiles).map(([prefix, files]) => (
+        {Object.entries(groupedFiles).map(([groupId, group]) => (
           <FileDisplay 
-            key={prefix}
-            files={files}
-            name={prefix}
-            isSelected={selectedGroup === prefix}
-            onSelect={() => handleGroupSelect(prefix)}
+            key={groupId}
+            files={group.files}
+            name={group.name}
+            summary={group.summary}
+            isSelected={selectedGroup === groupId}
+            onSelect={() => handleGroupSelect(groupId)}
             onFileSelect={onFileSelect}
           />
         ))}
@@ -33,7 +34,7 @@ const GroupSelectionPanel = ({ groupedFiles, onContinue, onFileSelect }) => {
           disabled={!selectedGroup}
           className="w-full py-2 text-lg"
         >
-          Continue with {selectedGroup}
+          Continue with {selectedGroup ? groupedFiles[selectedGroup].name : ''}
         </Button>
       </div>
     </div>
