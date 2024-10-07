@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FileDisplay from './FileDisplay';
 
-const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles }) => {
+const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles, groupName, onBackToGroups }) => {
   const handleFileUpload = (event) => {
     const files = Array.from(event.target.files);
     console.log("Files selected:", files);
@@ -34,6 +34,15 @@ const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles }) => {
         </div>
       ) : (
         <>
+          {groupName && (
+            <div className="mb-4">
+              <Button variant="ghost" onClick={onBackToGroups} className="pl-0">
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Back to Groups
+              </Button>
+              <h2 className="text-2xl font-bold mt-2">{groupName}</h2>
+            </div>
+          )}
           <FileDisplay 
             onFileSelect={onFileSelect}
             files={uploadedFiles}

@@ -46,43 +46,57 @@ const Home = () => {
   const handleContinue = (groupId) => {
     if (groupId && groupedFiles[groupId]) {
       setSelectedGroup(groupedFiles[groupId]);
+      setShowGroupSelection(false);
     }
+  };
+
+  const handleBackToGroups = () => {
+    setSelectedGroup(null);
+    setShowGroupSelection(true);
   };
 
   useEffect(() => {
     console.log("Current uploadedFiles state:", uploadedFiles);
     console.log("Current showGroupSelection state:", showGroupSelection);
     console.log("Current groupedFiles state:", groupedFiles);
-  }, [uploadedFiles, showGroupSelection, groupedFiles]);
+    console.log("Current selectedGroup state:", selectedGroup);
+  }, [uploadedFiles, showGroupSelection, groupedFiles, selectedGroup]);
 
   return (
     <div className="flex flex-col h-screen">
       <TopBar />
-      {!showGroupSelection ? (
-        <LeftPanel 
-          onFileSelect={handleFileSelect} 
-          onFileUpload={handleFileUpload}
-          uploadedFiles={uploadedFiles}
-        />
-      ) : (
-        <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
-          <ResizablePanel defaultSize={50} minSize={30}>
+      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+        <ResizablePanel defaultSize={50} minSize={30}>
+          {!showGroupSelection && !selectedGroup ? (
+            <LeftPanel 
+              onFileSelect={handleFileSelect} 
+              onFileUpload={handleFileUpload}
+              uploadedFiles={uploadedFiles}
+            />
+          ) : showGroupSelection ? (
             <GroupSelectionPanel 
               groupedFiles={groupedFiles} 
               onContinue={handleContinue}
               onFileSelect={handleFileSelect}
             />
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={50} minSize={30}>
-            <RightPanel 
-              selectedFile={selectedFile}
-              selectedGroup={selectedGroup}
-              onClose={handleClosePreview}
+          ) : (
+            <LeftPanel 
+              onFileSelect={handleFileSelect} 
+              uploadedFiles={selectedGroup.files}
+              groupName={selectedGroup.name}
+              onBackToGroups={handleBackToGroups}
             />
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      )}
+          )}
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={50} minSize={30}>
+          <RightPanel 
+            selectedFile={selectedFile}
+            selectedGroup={selectedGroup}
+            onClose={handleClosePreview}
+          />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };
