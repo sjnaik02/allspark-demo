@@ -19,9 +19,9 @@ const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles, groupName, onBac
       {uploadedFiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center">
           <Upload className="h-24 w-24 mb-6 text-gray-400" />
-          <h2 className="text-4xl font-bold mb-4">Upload Documents</h2>
-          <p className="text-xl text-gray-500 mb-8 text-center max-w-md">Upload your PDF documents to get started with AllSpark</p>
-          <label className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-md text-lg">
+          <h2 className="text-3xl font-bold mb-4">Upload Documents</h2>
+          <p className="text-lg text-gray-500 mb-8 text-center max-w-md">Upload your PDF documents to get started with AllSpark</p>
+          <label className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-md">
             <span>Upload Files</span>
             <input
               type="file"
@@ -52,9 +52,9 @@ const LeftPanel = ({ onFileSelect, onFileUpload, uploadedFiles, groupName, onBac
           <div className="mt-auto pt-6 text-xl">
             <p className="mb-4">What would you like to do?</p>
             <div className="flex justify-between gap-4">
-              <Button className="flex-1 font-medium font-mono text-lg py-3" variant="">Intake Summary</Button>
-              <Button className="flex-1 font-medium font-mono text-lg py-3" variant="">Chronology</Button>
-              <Button className="flex-1 font-medium font-mono text-lg py-3" variant="">Generate Demand Letter</Button>
+              <Button className="flex-1 font-medium font-mono py-3" variant="">Doc Summary</Button>
+              <Button className="flex-1 font-medium font-mono py-3" variant="">Time Line View</Button>
+              <Button className="flex-1 font-medium font-mono py-3" variant="">Medical Chronology</Button>
             </div>
           </div>
         </>
