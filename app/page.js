@@ -40,7 +40,6 @@ const Home = () => {
 
   const handleClosePreview = () => {
     setSelectedFile(null);
-    setSelectedGroup(null);
   };
 
   const handleContinue = (groupId) => {
@@ -65,38 +64,42 @@ const Home = () => {
   return (
     <div className="flex flex-col h-screen">
       <TopBar />
-      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
-        <ResizablePanel defaultSize={50} minSize={30}>
-          {!showGroupSelection && !selectedGroup ? (
+      {!selectedGroup ? (
+        <div className="flex-1 overflow-hidden">
+          {!showGroupSelection ? (
             <LeftPanel 
               onFileSelect={handleFileSelect} 
               onFileUpload={handleFileUpload}
               uploadedFiles={uploadedFiles}
             />
-          ) : showGroupSelection ? (
+          ) : (
             <GroupSelectionPanel 
               groupedFiles={groupedFiles} 
               onContinue={handleContinue}
               onFileSelect={handleFileSelect}
             />
-          ) : (
+          )}
+        </div>
+      ) : (
+        <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+          <ResizablePanel defaultSize={50} minSize={30}>
             <LeftPanel 
               onFileSelect={handleFileSelect} 
               uploadedFiles={selectedGroup.files}
               groupName={selectedGroup.name}
               onBackToGroups={handleBackToGroups}
             />
-          )}
-        </ResizablePanel>
-        <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={50} minSize={30}>
-          <RightPanel 
-            selectedFile={selectedFile}
-            selectedGroup={selectedGroup}
-            onClose={handleClosePreview}
-          />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={50} minSize={30}>
+            <RightPanel 
+              selectedFile={selectedFile}
+              selectedGroup={selectedGroup}
+              onClose={handleClosePreview}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
     </div>
   );
 };

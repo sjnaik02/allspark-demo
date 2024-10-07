@@ -16,8 +16,8 @@ const OnboardingScreen = ({ groupedFiles, onContinue }) => {
   };
 
   return (
-    <div className="flex flex-col h-full p-6 overflow-auto">
-      <div className="max-w-3xl mx-auto w-full"> {/* Added max-width and centering */}
+    <div className="flex flex-col h-full p-6 overflow-auto max-w-3xl mx-auto">
+      <div className=" w-full"> {/* Added max-width and centering */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">Document Groups</h1>
