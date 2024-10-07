@@ -5,6 +5,7 @@ import TopBar from '@/components/TopBar';
 import LeftPanel from '@/components/LeftPanel';
 import RightPanel from '@/components/RightPanel';
 import GroupSelectionPanel from '@/components/GroupSelectionPanel';
+import LoadingState from '@/components/LoadingState';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import { flattenFileStructure, groupFilesByCase } from '@/lib/utils';
 
@@ -14,6 +15,7 @@ const Home = () => {
   const [showGroupSelection, setShowGroupSelection] = useState(false);
   const [groupedFiles, setGroupedFiles] = useState({});
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFileSelect = (file) => {
     if (selectedFile && selectedFile.name === file.name) {
@@ -32,10 +34,14 @@ const Home = () => {
       console.log("New uploadedFiles state:", newFiles);
       return newFiles;
     });
-    const grouped = groupFilesByCase(flattenedFiles);
-    console.log("Grouped files:", grouped);
-    setGroupedFiles(grouped);
-    setShowGroupSelection(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      const grouped = groupFilesByCase(flattenedFiles);
+      console.log("Grouped files:", grouped);
+      setGroupedFiles(grouped);
+      setIsLoading(false);
+      setShowGroupSelection(true);
+    }, 2000);
   };
 
   const handleClosePreview = () => {
@@ -64,7 +70,9 @@ const Home = () => {
   return (
     <div className="flex flex-col h-screen">
       <TopBar />
-      {!selectedGroup ? (
+      {isLoading ? (
+        <LoadingState />
+      ) : !selectedGroup ? (
         <div className="flex-1 overflow-hidden">
           {!showGroupSelection ? (
             <LeftPanel 
