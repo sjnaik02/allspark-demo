@@ -6,14 +6,13 @@ import LeftPanel from '@/components/LeftPanel';
 import RightPanel from '@/components/RightPanel';
 import GroupSelectionPanel from '@/components/GroupSelectionPanel';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { flattenFileStructure } from '@/lib/utils';
+import { flattenFileStructure, groupFilesByCase } from '@/lib/utils';
 
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showGroupSelection, setShowGroupSelection] = useState(false);
   const [groupedFiles, setGroupedFiles] = useState({});
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
 
   const handleFileSelect = (file) => {
@@ -25,59 +24,41 @@ const Home = () => {
   };
 
   const handleFileUpload = (files) => {
+    console.log("Files received in Home component:", files);
     const flattenedFiles = flattenFileStructure(files);
-    setUploadedFiles(prevFiles => [...prevFiles, ...flattenedFiles]);
+    console.log("Flattened files:", flattenedFiles);
+    setUploadedFiles(prevFiles => {
+      const newFiles = [...prevFiles, ...flattenedFiles];
+      console.log("New uploadedFiles state:", newFiles);
+      return newFiles;
+    });
+    const grouped = groupFilesByCase(flattenedFiles);
+    console.log("Grouped files:", grouped);
+    setGroupedFiles(grouped);
     setShowGroupSelection(true);
   };
 
   const handleClosePreview = () => {
     setSelectedFile(null);
+    setSelectedGroup(null);
   };
 
   const handleContinue = (groupId) => {
     if (groupId && groupedFiles[groupId]) {
-      setUploadedFiles(groupedFiles[groupId].files);
       setSelectedGroup(groupedFiles[groupId]);
-      setShowGroupSelection(false);
-      setOnboardingComplete(true);
     }
   };
 
   useEffect(() => {
-    if (uploadedFiles.length > 0 && showGroupSelection) {
-      const grouped = uploadedFiles.reduce((acc, file) => {
-        // Extract the parent folder name from the full path
-        const pathParts = file.fullPath.split('/');
-        let groupName = 'Ungrouped';
-        
-        if (pathParts.length > 1) {
-          groupName = pathParts[0];
-        } else if (file.webkitRelativePath) {
-          // For browsers that support webkitRelativePath
-          const webkitParts = file.webkitRelativePath.split('/');
-          if (webkitParts.length > 1) {
-            groupName = webkitParts[0];
-          }
-        }
-
-        if (!acc[groupName]) {
-          acc[groupName] = {
-            files: [],
-            name: groupName,
-            summary: `Files from ${groupName}`
-          };
-        }
-        acc[groupName].files.push(file);
-        return acc;
-      }, {});
-      setGroupedFiles(grouped);
-    }
-  }, [uploadedFiles, showGroupSelection]);
+    console.log("Current uploadedFiles state:", uploadedFiles);
+    console.log("Current showGroupSelection state:", showGroupSelection);
+    console.log("Current groupedFiles state:", groupedFiles);
+  }, [uploadedFiles, showGroupSelection, groupedFiles]);
 
   return (
     <div className="flex flex-col h-screen">
       <TopBar />
-      {!uploadedFiles.length ? (
+      {!showGroupSelection ? (
         <LeftPanel 
           onFileSelect={handleFileSelect} 
           onFileUpload={handleFileUpload}
@@ -86,19 +67,11 @@ const Home = () => {
       ) : (
         <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
           <ResizablePanel defaultSize={50} minSize={30}>
-            {showGroupSelection ? (
-              <GroupSelectionPanel 
-                groupedFiles={groupedFiles} 
-                onContinue={handleContinue}
-                onFileSelect={handleFileSelect}
-              />
-            ) : (
-              <LeftPanel 
-                onFileSelect={handleFileSelect} 
-                onFileUpload={handleFileUpload}
-                uploadedFiles={uploadedFiles}
-              />
-            )}
+            <GroupSelectionPanel 
+              groupedFiles={groupedFiles} 
+              onContinue={handleContinue}
+              onFileSelect={handleFileSelect}
+            />
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50} minSize={30}>
