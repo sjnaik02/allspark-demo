@@ -17,8 +17,8 @@ const GroupSelectionPanel = ({ groupedFiles, onFileSelect }) => {
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-semibold">Matter Intake</h1>
           <p className="text-lg text-muted-foreground">
-            We automatically group your files by matter. Continue on to the
-            matter hub.
+            We have automatically grouped your files together by case. Continue
+            on to the matter hub to see more!
           </p>
         </div>
         <motion.div className="space-y-4">

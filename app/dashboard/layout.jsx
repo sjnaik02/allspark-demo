@@ -1,4 +1,5 @@
 import { Calendar, Contact, FileText, Settings } from "lucide-react";
+import Link from "next/link";
 
 const DashboardLayout = ({ children }) => {
   return (
@@ -17,20 +18,20 @@ const DashboardSidebar = () => {
       <div className="flex flex-col gap-4">
         <p className="text-2xl font-bold font-mono">AllSpark</p>
         <div className="flex flex-col gap-2">
-          <span
+          <Link
             href="/dashboard"
             className="flex items-center gap-2 bg-gray-200 rounded-md px-2 py-1"
           >
             <FileText className="h-4 w-4" />
             Matter Hub
-          </span>
+          </Link>
 
-          <span href="/dashboard/contacts" className="flex items-center gap-2 hover:bg-gray-200 rounded-md px-2 py-1">
+          <span className="flex items-center gap-2 hover:bg-gray-200 rounded-md px-2 py-1">
             <Contact className="h-4 w-4" />
             Contacts
           </span>
 
-          <span href="/dashboard/calendar" className="flex items-center gap-2 hover:bg-gray-200 rounded-md px-2 py-1">
+          <span className="flex items-center gap-2 hover:bg-gray-200 rounded-md px-2 py-1">
             <Calendar className="h-4 w-4" />
             Calendar
           </span>
