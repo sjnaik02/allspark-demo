@@ -1,13 +1,17 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import TopBar from '@/components/TopBar';
-import LeftPanel from '@/components/LeftPanel';
-import RightPanel from '@/components/RightPanel';
-import GroupSelectionPanel from '@/components/GroupSelectionPanel';
-import LoadingState from '@/components/LoadingState';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { flattenFileStructure, groupFilesByCase } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import TopBar from "@/components/TopBar";
+import LeftPanel from "@/components/LeftPanel";
+import RightPanel from "@/components/RightPanel";
+import GroupSelectionPanel from "@/components/GroupSelectionPanel";
+import LoadingState from "@/components/LoadingState";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
+import { flattenFileStructure, groupFilesByCase } from "@/lib/utils";
 
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -29,7 +33,7 @@ const Home = () => {
     console.log("Files received in Home component:", files);
     const flattenedFiles = flattenFileStructure(files);
     console.log("Flattened files:", flattenedFiles);
-    setUploadedFiles(prevFiles => {
+    setUploadedFiles((prevFiles) => {
       const newFiles = [...prevFiles, ...flattenedFiles];
       console.log("New uploadedFiles state:", newFiles);
       return newFiles;
@@ -41,7 +45,7 @@ const Home = () => {
       setGroupedFiles(grouped);
       setIsLoading(false);
       setShowGroupSelection(true);
-    }, 2000);
+    }, 3000);
   };
 
   const handleClosePreview = () => {
@@ -68,31 +72,34 @@ const Home = () => {
   }, [uploadedFiles, showGroupSelection, groupedFiles, selectedGroup]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen flex-col">
       <TopBar />
       {isLoading ? (
         <LoadingState />
       ) : !selectedGroup ? (
         <div className="flex-1 overflow-hidden">
           {!showGroupSelection ? (
-            <LeftPanel 
-              onFileSelect={handleFileSelect} 
+            <LeftPanel
+              onFileSelect={handleFileSelect}
               onFileUpload={handleFileUpload}
               uploadedFiles={uploadedFiles}
             />
           ) : (
-            <GroupSelectionPanel 
-              groupedFiles={groupedFiles} 
+            <GroupSelectionPanel
+              groupedFiles={groupedFiles}
               onContinue={handleContinue}
               onFileSelect={handleFileSelect}
             />
           )}
         </div>
       ) : (
-        <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="flex-1 overflow-hidden"
+        >
           <ResizablePanel defaultSize={50} minSize={30}>
-            <LeftPanel 
-              onFileSelect={handleFileSelect} 
+            <LeftPanel
+              onFileSelect={handleFileSelect}
               uploadedFiles={selectedGroup.files}
               groupName={selectedGroup.name}
               onBackToGroups={handleBackToGroups}
@@ -100,7 +107,7 @@ const Home = () => {
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={50} minSize={30}>
-            <RightPanel 
+            <RightPanel
               selectedFile={selectedFile}
               selectedGroup={selectedGroup}
               onClose={handleClosePreview}
