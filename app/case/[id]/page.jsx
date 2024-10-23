@@ -1,4 +1,6 @@
-import * as React from "react"
+"use client"
+
+import { useState, useEffect } from "react"
 import { Pencil, Zap, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,6 +16,30 @@ import {
 } from "@/components/ui/table"
 import Link from "next/link"
 
+
+const TypewriterText = ({ text, speed = 20, className }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayedText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, speed);
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text, speed]);
+
+  return (
+    <p className={className}>
+      {displayedText}
+      {currentIndex < text.length && <span className="animate-pulse">|</span>}
+    </p>
+  );
+};
+
 const IntakeAnalysis = () => (
   <div className="grid gap-6 md:grid-cols-2">
     <Card>
@@ -24,20 +50,13 @@ const IntakeAnalysis = () => (
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <h3 className="font-semibold mb-2">Daniel v. CleanMax Services, Inc.</h3>
-        <p className="text-sm text-muted-foreground mb-4">8392 Oakdale Avenue, Los Angeles, CA 91306</p>
-        <p className="text-sm mb-4">Oct 13, 2023</p>
-        <p className="text-sm mb-4">
-          Daniel Ramirez, a janitorial staff member at CleanMax Services, was employed from August 2021 to May 2024,
-          earning $18.50 per hour. He frequently missed meal and rest breaks due to heavy workloads, worked overtime
-          without proper compensation, and was required to work off the clock for 75 minutes per week without pay.
-          Ramirez raised concerns about unsafe working conditions, specifically exposure to hazardous chemicals without
-          protective equipment, which led to his abrupt termination in what he believes was retaliation. He also
-          experienced harassment and discrimination based on his Hispanic ethnicity, and faced delays in receiving his
-          final paycheck. Additionally, Ramirez had to purchase his own safety gear, was denied paid sick leave after
-          suffering chemical burns, and was refused time off to care for a sick family member. He claims violations of
-          California labor laws and the Fair Employment and Housing Act (FEHA).
-        </p>
+        <h3 className="font-semibold mb-2">
+          <TypewriterText text="Daniel v. CleanMax Services, Inc." />
+        </h3>
+        <TypewriterText text="8392 Oakdale Avenue, Los Angeles, CA 91306" className="text-sm text-muted-foreground mb-4" />
+        <TypewriterText text="Oct 13, 2023" />
+        <TypewriterText text="Daniel Ramirez, a janitorial staff member at CleanMax Services, was employed from August 2021 to May 2024, earning $18.50 per hour. He frequently missed meal and rest breaks due to heavy workloads, worked overtime without proper compensation, and was required to work off the clock for 75 minutes per week without pay. Ramirez raised concerns about unsafe working conditions, specifically exposure to hazardous chemicals without protective equipment, which led to his abrupt termination in what he believes was retaliation. He also experienced harassment and discrimination based on his Hispanic ethnicity, and faced delays in receiving his final paycheck. Additionally, Ramirez had to purchase his own safety gear, was denied paid sick leave after suffering chemical burns, and was refused time off to care for a sick family member. He claims violations of California labor laws and the Fair Employment and Housing Act (FEHA)." />
+
         <Button variant="outline" size="sm">
           <Pencil className="mr-2 h-4 w-4" />
           Edit
@@ -52,16 +71,16 @@ const IntakeAnalysis = () => (
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <h3 className="font-semibold mb-2">Clean Max Services Company Summary</h3>
+        <h3 className="font-semibold mb-2">
+          <TypewriterText text="Clean Max Services Company Summary" />
+        </h3>
         <p className="text-sm mb-4">
-          CleanMax Services, Inc. is a California-based commercial cleaning company with 3000 employees that specializes
-          in providing janitorial and maintenance services to office buildings, industrial facilities, and retail spaces.
-          Recent news shows that Clean Max has regularly been involved in worker rights violations over the past 3 years.
+          <TypewriterText text="CleanMax Services, Inc. is a California-based commercial cleaning company with 3000 employees that specializes in providing janitorial and maintenance services to office buildings, industrial facilities, and retail spaces. Recent news shows that Clean Max has regularly been involved in worker rights violations over the past 3 years." />
         </p>
         <div className="space-y-2 mb-4">
-          <p className="text-sm">(123) 456-7890</p>
-          <p className="text-sm">hr@cleanmax.com</p>
-          <p className="text-sm">3245 Vista Grande Blvd, Suite 201, Los Angeles, CA 90017</p>
+          <TypewriterText text="(123) 456-7890" />
+          <TypewriterText text="hr@cleanmax.com" />
+          <TypewriterText text="3245 Vista Grande Blvd, Suite 201, Los Angeles, CA 90017" />
         </div>
         <Button variant="outline" size="sm">
           <Pencil className="mr-2 h-4 w-4" />
@@ -78,13 +97,12 @@ const IntakeAnalysis = () => (
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between mb-4">
-          <span className="font-semibold">95%</span>
-          <span className="font-semibold">Value: $21,500</span>
+          <TypewriterText text="95%" className="font-semibold" />
+          <TypewriterText text="Value: $21,500" className="font-semibold" />
         </div>
         <Progress value={95} className="mb-4" />
         <p className="text-sm mb-4">
-          This case is most similar to Fonseca vs. Acme Inc. in our case history with clear and irrefutable claims
-          particularly per FEHA. Lean strongly on this along with Meal and Rest break issue to maximise claim value.
+          <TypewriterText text="This case is most similar to Fonseca vs. Acme Inc. in our case history with clear and irrefutable claims particularly per FEHA. Lean strongly on this along with Meal and Rest break issue to maximise claim value." />
         </p>
         <Button variant="outline" size="sm">
           <Pencil className="mr-2 h-4 w-4" />
@@ -104,9 +122,9 @@ const IntakeSummary = () => (
       </CardTitle>
     </CardHeader>
     <CardContent>
-      <h3 className="font-semibold mb-2">Daniel v. CleanMax Services, Inc.</h3>
-      <p className="text-sm text-muted-foreground mb-4">8392 Oakdale Ave, Los Angeles, CA 91306</p>
-      <p className="text-sm mb-4">Oct 13, 2023</p>
+      <TypewriterText text="Daniel v. CleanMax Services, Inc." className="font-semibold mb-2" />
+      <TypewriterText text="8392 Oakdale Ave, Los Angeles, CA 91306" className="text-sm text-muted-foreground mb-4" />
+      <TypewriterText text="Oct 13, 2023" className="text-sm mb-4" />
       <Table>
         <TableHeader>
           <TableRow>
@@ -118,36 +136,36 @@ const IntakeSummary = () => (
           <TableRow>
             <TableCell className="font-medium">Client Information</TableCell>
             <TableCell>
-              Name: Daniel Ramirez<br />
-              Email: daniel.ramirez@gmail.com<br />
-              Phone: +1 (818) 555-1234<br />
-              Address: 8932 Oakdale Ave, Los Angeles, CA 91306
+              <TypewriterText text="Name: Daniel Ramirez" />
+              <TypewriterText text="Email: daniel.ramirez@gmail.com" />
+              <TypewriterText text="Phone: +1 (818) 555-1234" />
+              <TypewriterText text="Address: 8932 Oakdale Ave, Los Angeles, CA 91306" />
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className="font-medium">Employment Details</TableCell>
             <TableCell>
-              Job Title: Janitorial Staff<br />
-              Hourly Rate: $18.50<br />
-              Employment Start Date: August 2, 2021<br />
-              Employment End Date: May 15, 2024<br />
-              Work Schedule: Mon-Fri, 6:00 am to 2:30 pm<br />
-              Supervisor: Carlos Mendoza
+              <TypewriterText text="Job Title: Janitorial Staff" />
+              <TypewriterText text="Hourly Rate: $18.50" />
+              <TypewriterText text="Employment Start Date: August 2, 2021" />
+              <TypewriterText text="Employment End Date: May 15, 2024" />
+              <TypewriterText text="Work Schedule: Mon-Fri, 6:00 am to 2:30 pm" />
+              <TypewriterText text="Supervisor: Carlos Mendoza" />
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className="font-medium">Meal/Rest Break Claims</TableCell>
             <TableCell>
-              Meal Break Violations: 4 times per week<br />
-              Rest Break Violations: 5 times per week<br />
-              Details: Frequently missed legally required breaks due to excessive workload
+              <TypewriterText text="Meal Break Violations: 4 times per week" />
+              <TypewriterText text="Rest Break Violations: 5 times per week" />
+              <TypewriterText text="Details: Frequently missed legally required breaks due to excessive workload" />
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell className="font-medium">Overtime Claims</TableCell>
             <TableCell>
-              Overtime Worked: 1 hour per day, 5 hours per week<br />
-              Compensation: Client was not paid at the overtime rate
+              <TypewriterText text="Overtime Worked: 1 hour per day, 5 hours per week" />
+              <TypewriterText text="Compensation: Client was not paid at the overtime rate" />
             </TableCell>
           </TableRow>
         </TableBody>
@@ -242,19 +260,19 @@ const DemandAndNegotiation = () => (
         <CardTitle>Confidential Settlement Communication</CardTitle>
       </CardHeader>
       <CardContent className="max-h-[600px] overflow-y-auto">
-        <p className="text-sm mb-2">(Cal. Evid. Code § 1152)</p>
-        <p className="text-sm mb-4">October 10, 2024</p>
-        <p className="text-sm mb-4">VIA FIRST CLASS MAIL AND/OR ELECTRONIC MAIL</p>
-        <p className="text-sm mb-2">CleanMax Services, Inc.</p>
-        <p className="text-sm mb-2">1234 Business Ave, Suite 567</p>
-        <p className="text-sm mb-4">Los Angeles, CA 90017</p>
-        <p className="text-sm mb-4">Subject: Daniel Ramirez v. CleanMax Services, Inc.</p>
-        <p className="text-sm mb-4">Dear Sir or Madam,</p>
-        <p className="text-sm mb-4">AllSpark Legal represents Daniel Ramirez, who worked for CleanMax Services, Inc. ("CleanMax") from August 2021 until May 2024 as janitorial staff. We specialize in employment claims and bring a wealth of experience in cases such as Mr. Ramirez's.</p>
-        <p className="text-sm mb-4">Mr. Ramirez retained us to represent him on the following claims against CleanMax:</p>
-        <p className="text-sm mb-4">Wrongful Termination: CleanMax wrongfully terminated Mr. Ramirez in retaliation for raising concerns about unsafe working conditions involving exposure to hazardous cleaning chemicals. This action violates public policy and the Fair Employment and Housing Act (FEHA).</p>
-        <p className="text-sm mb-4">Meal Period and Rest Break Violations: Mr. Ramirez frequently missed legally required meal and rest breaks due to workload. CleanMax failed to provide Mr. Ramirez with compliant breaks 4 times per week for  meal breaks and 5 times per week for rest breaks.</p>
-        <p className="text-sm">Off-the-Clock Work: Mr. Ramirez was required to work 15 minutes before his scheduled shift to...</p>
+        <TypewriterText text="(Cal. Evid. Code § 1152)" className="text-sm mb-2" />
+        <TypewriterText text="October 10, 2024" className="text-sm mb-4" />
+        <TypewriterText text="VIA FIRST CLASS MAIL AND/OR ELECTRONIC MAIL" className="text-sm mb-4" />
+        <TypewriterText text="CleanMax Services, Inc." className="text-sm mb-2" />
+        <TypewriterText text="1234 Business Ave, Suite 567" className="text-sm mb-2" />
+        <TypewriterText text="Los Angeles, CA 90017" className="text-sm mb-4" />
+        <TypewriterText text="Subject: Daniel Ramirez v. CleanMax Services, Inc." className="text-sm mb-4" />
+        <TypewriterText text="Dear Sir or Madam," className="text-sm mb-4" />
+        <TypewriterText text="AllSpark Legal represents Daniel Ramirez, who worked for CleanMax Services, Inc. (“CleanMax”) from August 2021 until May 2024 as janitorial staff. We specialize in employment claims and bring a wealth of experience in cases such as Mr. Ramirez’s." className="text-sm mb-4" />
+        <TypewriterText text="Mr. Ramirez retained us to represent him on the following claims against CleanMax:" className="text-sm mb-4" />
+        <TypewriterText text="Wrongful Termination: CleanMax wrongfully terminated Mr. Ramirez in retaliation for raising concerns about unsafe working conditions involving exposure to hazardous cleaning chemicals. This action violates public policy and the Fair Employment and Housing Act (FEHA)." className="text-sm mb-4" />
+        <TypewriterText text="Meal Period and Rest Break Violations: Mr. Ramirez frequently missed legally required meal and rest breaks due to workload. CleanMax failed to provide Mr. Ramirez with compliant breaks 4 times per week for meal breaks and 5 times per week for rest breaks." className="text-sm mb-4" />
+        <TypewriterText text="Off-the-Clock Work: Mr. Ramirez was required to work 15 minutes before his scheduled shift to..." className="text-sm" />
       </CardContent>
     </Card>
   </div>

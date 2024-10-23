@@ -14,7 +14,7 @@ export default DashboardLayout;
 
 const DashboardSidebar = () => {
   return (
-    <aisde className="h-screen w-56  border-r-2 py-4 pr-4">
+    <div className="h-screen w-56  border-r-2 py-4 pr-4">
       <div className="flex flex-col gap-4">
         <p className="text-2xl font-bold font-mono">AllSpark</p>
         <div className="flex flex-col gap-2">
@@ -44,6 +44,6 @@ const DashboardSidebar = () => {
           </span>
         </div>
       </div>
-    </aisde>
+    </div>
   );
 };
