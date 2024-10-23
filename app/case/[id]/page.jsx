@@ -1,6 +1,4 @@
 "use client"
-
-import { useState, useEffect } from "react"
 import { Pencil, Zap, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,31 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import Link from "next/link"
-
-
-const TypewriterText = ({ text, speed = 20, className }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, speed);
-
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, text, speed]);
-
-  return (
-    <p className={className}>
-      {displayedText}
-      {currentIndex < text.length && <span className="animate-pulse">|</span>}
-    </p>
-  );
-};
-
+import TypewriterText from "@/components/TypewriterText"
 const IntakeAnalysis = () => (
   <div className="grid gap-6 md:grid-cols-2">
     <Card>
