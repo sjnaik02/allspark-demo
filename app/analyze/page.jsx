@@ -37,6 +37,7 @@ export default function IssueSpotting() {
       }
 
       const data = await response.json();
+      console.log(data.result);
       setResult(data.result);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -124,9 +125,11 @@ export default function IssueSpotting() {
                 <div className="space-y-4">
                   <h3 className="font-semibold">Issues Spotted:</h3>
                   <ul className="list-disc pl-6 space-y-2">
-                    {result.issues_spotted.map((issue, index) => (
+                    {result.parsed_json.Complaints.map((complaint, index) => (
                       <li key={index} className="text-gray-700">
-                        <TypewriterText text={issue} />
+                        <strong>Claim:</strong> <TypewriterText text={complaint.Claim} />
+                        <strong>Description:</strong> <TypewriterText text={complaint.Description} />
+                        <strong>Reasoning:</strong> <TypewriterText text={complaint.Reasoning} />
                       </li>
                     ))}
                   </ul>
